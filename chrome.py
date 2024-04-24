@@ -6,26 +6,28 @@ from selenium.webdriver.support.ui import Select
 from selenium.webdriver.chrome.options import Options
 import shutil
 import time
+import datetime
 
-Nome_Pasta = "teste"
+
+Ano = datetime.datetime.now().year
+Nome_Pasta = Ano % 100
+Nome_Pasta = str(Nome_Pasta)
 
 
 def criar_pasta(origin, nome_pasta):
-    if not os.path.exists(nome_pasta):
-        nova_pasta = os.path.join(origin,nome_pasta)
+    count = 1
+    new_pasta = f"{nome_pasta}-{count}"
+    if not os.path.exists(new_pasta):
+        nova_pasta = os.path.join(origin,new_pasta)
         os.makedirs(nova_pasta)
         return nova_pasta
     else:
-        count = 0
         while True:
-            nova_pasta = f"{nome_pasta}{count}"
+            nova_pasta = f"{nome_pasta}-{count}"
             if not os.path.exists(nova_pasta):
                 os.makedirs(nova_pasta)
                 return nova_pasta
             count += 1
-
-
-
 
 
 extensao = ".csv"
@@ -33,7 +35,7 @@ extensao = ".csv"
 def mover_arquivo():
 
     origem = r"C:\Users\e_gustavoaa\Documents\projetos\webscrapping\\"
-    destino = r"C:\Users\e_gustavoaa\Documents\projetos\webscrapping\\" + criar_pasta(origem,Nome_Pasta)
+    destino = criar_pasta(origem,Nome_Pasta)
     
     os.listdir(destino)
     
