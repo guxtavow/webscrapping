@@ -6,37 +6,45 @@ from selenium.webdriver.support.ui import Select
 from selenium.webdriver.chrome.options import Options
 import shutil
 import time
+import datetime
+import ipdb
 
-Nome_Pasta = "teste"
+
+Ano = datetime.datetime.now().year
+Nome_Pasta = Ano % 100
+Nome_Pasta = str(Nome_Pasta)
 
 
-def criar_pasta(origin, nome_pasta):
-    if not os.path.exists(nome_pasta):
-        nova_pasta = os.path.join(origin,nome_pasta)
-        os.makedirs(nova_pasta)
-        return nova_pasta
+
+def criar_pasta(origin):
+    count = 1
+    if os.path.exists(Nome_Pasta):
+        nova_pasta = f"{Nome_Pasta}-{count+1}"
+        if not os.path.exists(os.path.join(origin,nova_pasta)):
+            os.makedirs(os.path.join(origin,nova_pasta))
+            return nova_pasta
+        if count > 12:
+            count = 1
+    
     else:
-        count = 0
-        while True:
-            nova_pasta = f"{nome_pasta}{count}"
-            if not os.path.exists(nova_pasta):
-                os.makedirs(nova_pasta)
-                return nova_pasta
-            count += 1
+        nova_pasta = os.path.join(origin,Nome_Pasta)
+        pasta_criada = f"{nova_pasta}-{count}"
+        os.makedirs(pasta_criada)
+        return pasta_criada
 
 
 
 
-
-extensao = ".csv"
 
 def mover_arquivo():
 
     origem = r"C:\Users\e_gustavoaa\Documents\projetos\webscrapping\\"
-    destino = r"C:\Users\e_gustavoaa\Documents\projetos\webscrapping\\" + criar_pasta(origem,Nome_Pasta)
-    
+    extensao = ".csv"
+    destino = Nome_Pasta
+
+
     os.listdir(destino)
-    
+
     for nome_arquivo in os.listdir(origem):
         if nome_arquivo.endswith(extensao):
             caminho_origem = os.path.join(origem,nome_arquivo)
@@ -65,13 +73,11 @@ if response.status_code == 200:  #se conseguir acessar o site (codigo igual a 20
     time.sleep(3) #3 segundos para pagina carregar e executar outras funções
 
     UF = driver.find_element(By.LINK_TEXT,'CNAE/UF')#acho o elemento pelo link de texto
-    UF.click()#clico nele
+    UF.click() #clico nele
 
-    
     selecao_elemento = driver.find_element(By.NAME, 'form:uf') #DEFINO O ELEMENTO E QUAL INFO IREI PEGAR DESSA VARIAVEL
     Selecionado = Select(selecao_elemento) #ESSA VARIAVEL QUE IREI USAR
-
-    Selecionado.select_by_value('SP')#seleciono a opção/variavel de valor 'SP'
+    Selecionado.select_by_value('SP') #seleciono a opção/variavel de valor 'SP'
 
     consulta = driver.find_element(By.NAME,'form:botaoConsultar')
     consulta.click()
@@ -81,8 +87,8 @@ if response.status_code == 200:  #se conseguir acessar o site (codigo igual a 20
     exporta.click()
     time.sleep(7)
 
-    
     mover_arquivo()
+    ipdb.set_trace()
 
     driver.quit() #Fecho a janela
 
