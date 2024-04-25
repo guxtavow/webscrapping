@@ -34,7 +34,7 @@ extensao = ".csv"
 
 def mover_arquivo():
 
-    origem = r"C:\Users\e_gustavoaa\Documents\projetos\webscrapping\\"
+    origem = r"C:\Users\e_gustavoaa\Documents\projetos\webscrapping\CNAE-UF\\"
     destino = criar_pasta(origem,Nome_Pasta)
     
     os.listdir(destino)
@@ -56,7 +56,7 @@ if response.status_code == 200:  #se conseguir acessar o site (codigo igual a 20
 
     prefs = {   #preferencias das opções do chrome
         "profile.default_content_settings.popups": 0,
-        "download.default_directory": r"C:\Users\e_gustavoaa\Documents\projetos\webscrapping\\",
+        "download.default_directory": r"C:\Users\e_gustavoaa\Documents\projetos\webscrapping\CNAE-UF\\",
         "directory_upgrade": True
     }
 
