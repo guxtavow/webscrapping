@@ -34,9 +34,7 @@ extensao = ".csv"
 
 def mover_arquivo():
 
-    atual = os.getcwd() #pega o diretório atual retornando ele como uma string
-
-    origem = atual
+    origem = r"C:\Users\e_gustavoaa\Documents\projetos\webscrapping\Municipio2"
     destino = criar_pasta(origem,Nome_Pasta)
     
     os.listdir(destino)
@@ -56,11 +54,9 @@ response = requests.get(url)
 if response.status_code == 200:
     opcoes_chrome = webdriver.ChromeOptions()   
 
-    atual = os.getcwd()
-
     prefs = {  
         "profile.default_content_settings.popups": 0,
-        "download.default_directory": atual,
+        "download.default_directory": r"C:\Users\e_gustavoaa\Documents\projetos\webscrapping\Municipio2",
         "directory_upgrade": True
     }
 
