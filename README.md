@@ -59,10 +59,8 @@ In this project, I used Python with some libraries:
 - Move '.csv' files to new folders
 
 ## INSTALLATION
-`$ npm install`
-
-## GETTING STARTED
-`$ npm start`
+`$ pip install selenium`
+`$ pip install request`
 
 ## PROJECT STATUS:
  <h3><b><font color="#e5e619">Ongoing.</font></b></h3>
