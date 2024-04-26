@@ -8,6 +8,8 @@ import shutil
 import time
 import datetime
 
+#Todos os dados tirados de http://www22.receita.fazenda.gov.br/inscricaomei/private/pages/default.jsf
+print("Rodando webscrapping MEI do segmento: CNAE/Municipio")
 
 Ano = datetime.datetime.now().year
 Nome_Pasta = Ano % 100
@@ -45,6 +47,8 @@ def mover_arquivo():
             caminho_destino = os.path.join(destino,nome_arquivo)
             shutil.move(caminho_origem, caminho_destino)
             print(f"Arquivo '{nome_arquivo} movido para {destino}.")
+            print()
+
             
 
 url = "http://www22.receita.fazenda.gov.br/inscricaomei/private/pages/relatorios/opcoesRelatorio.jsf" 
@@ -52,7 +56,9 @@ url = "http://www22.receita.fazenda.gov.br/inscricaomei/private/pages/relatorios
 response = requests.get(url) 
 
 if response.status_code == 200:
-    opcoes_chrome = webdriver.ChromeOptions()   
+    opcoes_chrome = webdriver.ChromeOptions()  
+    opcoes_chrome.add_argument('--headless')
+    opcoes_chrome.add_argument('--disable-gpu') 
 
     prefs = {  
         "profile.default_content_settings.popups": 0,
