@@ -18,25 +18,23 @@ Nome_Pasta = str(Nome_Pasta)
 
 def criar_pasta(origin, nome_pasta):
     count = 1
-    new_pasta = f"{nome_pasta}-{count}"
-    if not os.path.exists(new_pasta):
-        nova_pasta = os.path.join(origin,new_pasta)
-        os.makedirs(nova_pasta)
-        return nova_pasta
-    else:
-        while True:
-            nova_pasta = f"{nome_pasta}-{count}"
-            if not os.path.exists(nova_pasta):
-                os.makedirs(nova_pasta)
-                return nova_pasta
+    while True:
+        counts = str(count).zfill(2)
+        nova_pasta = f"{nome_pasta}-{counts}"
+        if not os.path.exists(os.path.join(origin, nova_pasta)):
+            nova_pasta_caminho = os.path.join(origin, nova_pasta)
+            os.makedirs(nova_pasta_caminho)
+            return nova_pasta_caminho
+        else:
             count += 1
+           
 
 
 extensao = ".csv"
 
 def mover_arquivo():
 
-    origem = r"C:\Users\e_gustavoaa\Documents\projetos\webscrapping\Municipio2"
+    origem = r"Y:\Econômicas\MEI_Estatísticas\Estado de São Paulo por Sexo"
     destino = criar_pasta(origem,Nome_Pasta)
     
     os.listdir(destino)
@@ -61,7 +59,7 @@ if response.status_code == 200:
 
     prefs = {  
         "profile.default_content_settings.popups": 0,
-        "download.default_directory": r"C:\Users\e_gustavoaa\Documents\projetos\webscrapping\Municipio2",
+        "download.default_directory": r"Y:\Econômicas\MEI_Estatísticas\Estado de São Paulo por Sexo",
         "directory_upgrade": True
     }
 

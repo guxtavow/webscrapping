@@ -12,6 +12,6 @@ def Arquivos():
     # Loop sobre cada arquivo e executá-lo em um subprocesso no diretório correspondente
     for arquivo_info in arquivos:
         caminho_completo = f'{arquivo_info["diretorio"]}/{arquivo_info["arquivo"]}'
-        subprocess.run(['python', caminho_completo], cwd=arquivo_info['diretorio'])
+        subprocess.run(['python', caminho_completo])
 
 Arquivos()
