@@ -24,6 +24,9 @@ Neste projeto, utilizei **Python** com algumas bibliotecas:
 `$ pip install selenium`
 `$ pip install request`
 
+## INICIALIZAR
+`$ python Exec.py`
+
 ## STATUS DO PROJETO:
  <h3><b><font color="#e5e619">Em andamento.</font></b></h3>
 
