@@ -65,5 +65,8 @@ In this project, I used Python with some libraries:
 `$ pip install selenium`
 `$ pip install request`
 
+## INITIALIZE
+`$ python Exec.py`
+
 ## PROJECT STATUS:
  <h3><b><font color="#e5e619">Ongoing.</font></b></h3>
