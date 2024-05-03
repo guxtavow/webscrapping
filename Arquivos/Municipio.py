@@ -9,7 +9,7 @@ import time
 import datetime
 
 #Todos os dados tirados de http://www22.receita.fazenda.gov.br/inscricaomei/private/pages/default.jsf
-print("Rodando webscrapping MEI do segmento: Atividade Econômica")
+print("Rodando webscrapping MEI do segmento: CNAE/Municipio")
 
 Ano = datetime.datetime.now().year
 Nome_Pasta = Ano % 100
@@ -29,10 +29,12 @@ def criar_pasta(origin, nome_pasta):
             count += 1
            
 
+
 extensao = ".csv"
 
 def mover_arquivo():
-    origem = r"Y:\Econômicas\MEI_Estatísticas\Brasil"
+
+    origem = r"Y:\Econômicas\MEI_Estatísticas\Municipios de São Paulo"
     destino = criar_pasta(origem,Nome_Pasta)
     
     os.listdir(destino)
@@ -44,37 +46,54 @@ def mover_arquivo():
             shutil.move(caminho_origem, caminho_destino)
             print(f"Arquivo '{nome_arquivo} movido para {destino}.")
             print()
+
             
 
-url = "http://www22.receita.fazenda.gov.br/inscricaomei/private/pages/relatorios/opcoesRelatorio.jsf" #site do webscrapping
+url = "http://www22.receita.fazenda.gov.br/inscricaomei/private/pages/relatorios/opcoesRelatorio.jsf" 
 
 response = requests.get(url) 
 
-if response.status_code == 200:  #se conseguir acessar o site (codigo igual a 200)
-    opcoes_chrome = webdriver.ChromeOptions()   #definindo variavel de opções do chrome
-    opcoes_chrome.add_argument('--headless') #fazer não aparecer a janela
-    opcoes_chrome.add_argument('--disable-gpu')
+if response.status_code == 200:
+    opcoes_chrome = webdriver.ChromeOptions()  
+    opcoes_chrome.add_argument('--headless')
+    opcoes_chrome.add_argument('--disable-gpu') 
 
-    prefs = {   #preferencias das opções do chrome
+    prefs = {  
         "profile.default_content_settings.popups": 0,
-        "download.default_directory": r"Y:\Econômicas\MEI_Estatísticas\Brasil",
+        "download.default_directory": r"Y:\Econômicas\MEI_Estatísticas\Municipios de São Paulo",
         "directory_upgrade": True
     }
 
-    opcoes_chrome.add_experimental_option("prefs", prefs) #chamo as preferencias
+    opcoes_chrome.add_experimental_option("prefs", prefs) 
 
-    driver = webdriver.Chrome(options=opcoes_chrome) #inicio o webdriver
+    driver = webdriver.Chrome(options=opcoes_chrome) 
     driver.get(url)
     time.sleep(3) #3 segundos para pagina carregar e executar outras funções
 
-    AE = driver.find_element(By.LINK_TEXT,'Atividade Econômica')#acho o elemento pelo link de texto
-    AE.click()#clico nele
-
-    exporta = driver.find_element(By.NAME, 'form:botaoExportarCsv')
-    exporta.click()
-    time.sleep(7)
+    Mun = driver.find_element(By.LINK_TEXT,'CNAE/Município')#acho o elemento pelo link de texto
+    Mun.click()#clico nele
 
     
+    selecao_elemento = driver.find_element(By.NAME, 'form:uf') 
+    Selecionado = Select(selecao_elemento) 
+
+    Selecionado.select_by_value('SP')#seleciono a opção/variavel de valor 'SP'
+
+    Todos = driver.find_element(By.NAME, "form:todosMunicipios") #selecionando o botão para todos os municipios
+    Todos.click()
+    time.sleep(2)
+
+    consulta = driver.find_element(By.NAME,'form:botaoConsultar')
+    consulta.click()
+    time.sleep(5)
+
+    exporta = driver.find_element(By.NAME, 'form:botaoExportarCsv')
+    print('exportando...')
+    time.sleep(60) #time sleep de 1 minuto pois os dados podem demorar para serem exibidos nesse forms
+
+    exporta.click()
+    time.sleep(3)
+
     mover_arquivo()
 
     driver.quit() #Fecho a janela
