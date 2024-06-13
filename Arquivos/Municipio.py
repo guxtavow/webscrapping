@@ -7,28 +7,32 @@ from selenium.webdriver.chrome.options import Options
 import shutil
 import time
 import datetime
+import sys
 
 #Todos os dados tirados de http://www22.receita.fazenda.gov.br/inscricaomei/private/pages/default.jsf
+print()
 print("Rodando webscrapping MEI do segmento: CNAE/Municipio")
 
 Ano = datetime.datetime.now().year
 Nome_Pasta = Ano % 100
 Nome_Pasta = str(Nome_Pasta)
 
-
 def criar_pasta(origin, nome_pasta):
-    count = 1
+    mes = datetime.datetime.now().month
+    mes_nomes = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro']
+    mes_Nome = mes_nomes[mes-2]
     while True:
-        counts = str(count).zfill(2)
-        nova_pasta = f"{nome_pasta}-{counts}"
+        mesPassado = mes - 1 
+        mesPassado = str(mesPassado).zfill(2)
+        nova_pasta = f"{nome_pasta}-{mesPassado}"
         if not os.path.exists(os.path.join(origin, nova_pasta)):
             nova_pasta_caminho = os.path.join(origin, nova_pasta)
             os.makedirs(nova_pasta_caminho)
             return nova_pasta_caminho
         else:
-            count += 1
-           
-
+            print()
+            print(f"Os MEIS desse segmento, no mês de {mes_Nome}, já foram extraídos.")
+            sys.exit()
 
 extensao = ".csv"
 
