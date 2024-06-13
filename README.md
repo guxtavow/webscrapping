@@ -27,8 +27,10 @@ Neste projeto, utilizei **Python** com algumas bibliotecas:
 ## INICIALIZAR
 `$ python Exec.py`
 
-## STATUS DO PROJETO:
- <h3><b><font color="#e5e619">Em andamento.</font></b></h3>
+## OBSERVAÇÃO
+ O projeto, quando executado, sempre criara uma pasta referente ao mês passado, pois sua importanção deve acontecer de forma MENSAL. Tenha em mente de executa-lo no começo do mês, para extrair todos os dados do mês passado acumulados.
+
+ <h3><b><font color="#green">Finalizado.</font></b></h3>
 
 ***
 
@@ -68,5 +70,8 @@ In this project, I used Python with some libraries:
 ## INITIALIZE
 `$ python Exec.py`
 
+## OBS
+The program, when executed, always create a folder of last month, thats why its a recommendation only use this on first day of your respectivily month for bring data of the last.
+
 ## PROJECT STATUS:
- <h3><b><font color="#e5e619">Ongoing.</font></b></h3>
+ <h3><b><font color="#e5e619">Finished.</font></b></h3>
