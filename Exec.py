@@ -9,8 +9,6 @@ def Arquivos():
         {'arquivo': 'Faixa_Etaria.py', 'diretorio': local},
         {'arquivo': 'Municipio.py', 'diretorio': local},
         {'arquivo': 'Municipio2.py', 'diretorio': local},
-        {'arquivo': 'Faixa_Etaria.py', 'diretorio': local},
-        {'arquivo': 'Municipio2.py', 'diretorio': local}
     ]
 
     # Loop sobre cada arquivo e executá-lo em um subprocesso no diretório correspondente
