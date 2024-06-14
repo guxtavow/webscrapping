@@ -25,6 +25,10 @@ Neste projeto, utilizei **Python** com algumas bibliotecas:
 `$ pip install request`
 
 ## INICIALIZAR
+Este arquivo utiliza a versão do Python: 3.12 antes de executa-lo instalar o arquivo `requirements.txt`.
+
+Assim que instalar, para executa-lo:
+
 `$ python Exec.py`
 
 ## OBSERVAÇÃO
