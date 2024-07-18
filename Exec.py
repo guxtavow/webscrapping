@@ -1,7 +1,7 @@
 import subprocess
 
 def Arquivos():
-    local = r"C:\Users\e_gustavoaa\Documents\projetos\webscrapping\Arquivos"
+    local = r"C:\Users\e_gustavoaa\OneDrive - SERVICO DE APOIO AS MICRO E PEQUENAS EMPRESAS DE SAO PAULO - SEBRAE\Documentos\projetos\webscrapping\Arquivos"
     # Lista de arquivos a serem executados com seus respectivos diretórios
     arquivos = [
         {'arquivo': 'Atividade_Economica.py', 'diretorio': local},
