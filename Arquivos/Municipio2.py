@@ -11,28 +11,25 @@ import shutil
 import time
 import datetime
 import sys
-#import pdb PARA DEBUGAR
 
-#Todos os dados tirados de http://www22.receita.fazenda.gov.br/inscricaomei/private/pages/default.jsf
-print()
 print("Rodando webscrapping MEI do segmento: CNAE UF/Município/Sexo")
 
 Ano = datetime.datetime.now().year
-Nome_Pasta = Ano % 100
-Nome_Pasta = str(Nome_Pasta)
+Nome_Pasta = str(Ano % 100)
 
-def Identificar_Municipio(arquivo, id): # DEF para identificação dos nomes dos municipios pelos ID's
+# Função para identificar o município pelo ID
+def Identificar_Municipio(arquivo, id):
     try:
         with open(arquivo, 'r') as file:
-            dados = json.load(file) # abro e carro o json como arquivo
-        for item in dados: # itero sobre todos os itens e depois identifico se o item tem um id
+            dados = json.load(file)
+        for item in dados:
             if item['id'] == id:
-                return item['name'] # se tiver, trazer o nome do municipio
+                return item['name']
     except FileNotFoundError:
-        print('erro: Arquivo não encontrado')
-        return sys.exit()
+        print('Erro: Arquivo não encontrado')
+        sys.exit()
 
-
+# Função para criar pasta
 def criar_pasta(origin, nome_pasta):
     mes = datetime.datetime.now().month
     mes_nomes = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro']
@@ -46,92 +43,109 @@ def criar_pasta(origin, nome_pasta):
             os.makedirs(nova_pasta_caminho)
             return nova_pasta_caminho
         else:
-            print()
             print(f"Os MEIS desse segmento, no mês de {mes_Nome}, já foram extraídos.")
             sys.exit()
 
-
 extensao = ".csv"
 
+# Função para mover arquivo
 def mover_arquivo():
     origem = r"Y:\Econômicas\MEI_Estatísticas\Estado de São Paulo por Sexo\teste"
-    destino = criar_pasta(origem,Nome_Pasta)
-    
-    os.listdir(destino)
+    destino = criar_pasta(origem, Nome_Pasta)
     
     for nome_arquivo in os.listdir(origem):
         if nome_arquivo.endswith(extensao):
-            caminho_origem = os.path.join(origem,nome_arquivo)
-            caminho_destino = os.path.join(destino,nome_arquivo)    
+            caminho_origem = os.path.join(origem, nome_arquivo)
+            caminho_destino = os.path.join(destino, nome_arquivo)    
             shutil.move(caminho_origem, caminho_destino)
-            print(f"Arquivo '{nome_arquivo} movido para {destino}.")
-            print()
+            print(f"Arquivo '{nome_arquivo}' movido para {destino}.")
 
+# Função para carregar o progresso do último arquivo baixado
+def carregar_progresso(origem):
+    arquivos_existentes = sorted([f for f in os.listdir(origem)])
+#    with open('progresso.txt', 'w') as f:
+#       f.write(arquivos_existentes)
+    if arquivos_existentes:
+        ultimo_arquivo = arquivos_existentes[-1]
+        return ultimo_arquivo
+    
 
+# Configurações do Selenium
 url = "http://www22.receita.fazenda.gov.br/inscricaomei/private/pages/relatorios/opcoesRelatorio.jsf" 
-
-response = requests.get(url) 
+response = requests.get(url)
 
 if response.status_code == 200:
     opcoes_chrome = webdriver.ChromeOptions()
     opcoes_chrome.add_argument('--headless')
     opcoes_chrome.add_argument('--disable-gpu')
 
-    prefs = {  
+    prefs = {
         "profile.default_content_settings.popups": 0,
         "download.default_directory": r"Y:\Econômicas\MEI_Estatísticas\Estado de São Paulo por Sexo\teste",
         "directory_upgrade": True
     }
 
-    opcoes_chrome.add_experimental_option("prefs", prefs) 
+    opcoes_chrome.add_experimental_option("prefs", prefs)
 
-    driver = webdriver.Chrome(options=opcoes_chrome) 
+    driver = webdriver.Chrome(options=opcoes_chrome)
     driver.get(url)
-    time.sleep(3) # 3 segundos para pagina carregar e executar outras funçõe
+    time.sleep(3)
 
-    Mun = driver.find_element(By.LINK_TEXT,'CNAE UF/Município/Sexo') # acho o elemento pelo link de texto
-    Mun.click() # clico nele
+    Mun = driver.find_element(By.LINK_TEXT, 'CNAE UF/Município/Sexo')
+    Mun.click()
     
-    selecao_elemento = driver.find_element(By.NAME, 'form:uf') 
+    selecao_elemento = driver.find_element(By.NAME, 'form:uf')
     Selecionado = Select(selecao_elemento)
-    Selecionado.select_by_value('SP') # seleciono a opção/variavel de valor 'SP'
+    Selecionado.select_by_value('SP')
     time.sleep(5)
 
-    Wait = WebDriverWait(driver, 10) # varivel que permite eu alocar uma trava para aguardar o elemento reaparecer no campo de seleção para seleciona-lo
+    Wait = WebDriverWait(driver, 10)
     selecao_elemento2 = Wait.until(EC.presence_of_element_located((By.ID, 'form:municipioUF')))
     select = Select(selecao_elemento2)
     options = [option.get_attribute("value") for option in select.options]
 
+    origem = r"Y:\Econômicas\MEI_Estatísticas\Estado de São Paulo por Sexo\teste"
+    municipios = r"Arquivos\municipios.json"
+
+    # Carregar progresso
+    ultimo_municipio = carregar_progresso(origem)
+    if ultimo_municipio:
+        # Identificar o value do último município processado a partir do arquivo
+        ultimo_value = None
+        for item in json.load(open(municipios)):
+            if item['name'] == ultimo_municipio:
+                ultimo_value = item['id']
+                break
+
+        if ultimo_value and ultimo_value in options:
+            start_index = options.index(ultimo_value) + 1
+        else:
+            start_index = 0
+    else:
+        start_index = 0
+
     # Iterar sobre cada valor de município
-    for value in options:
-        origem = r"Y:\Econômicas\MEI_Estatísticas\Estado de São Paulo por Sexo\teste" # origem da onde está alocado o arquivo default
-        municipios = r"Arquivos\municipios.json" # origem da onde está o arquivo JSON
-        nome_arq = Identificar_Municipio(municipios,value) # varivel da def
+    for value in options[start_index:]:
+        nome_arq = Identificar_Municipio(municipios, value)
+
+        nome_arquivo_destino = os.path.join(origem, f"{nome_arq}.csv")
+        if os.path.exists(nome_arquivo_destino):
+            print(f"O arquivo para o município {nome_arq} já existe. Pulando para o próximo.")
+            continue
 
         time.sleep(2)
-        # Obtenho novamente o select e depois seleciono a opção
         selecao_elemento2 = Wait.until(EC.presence_of_element_located((By.ID, 'form:municipioUF')))
         select = Select(selecao_elemento2)
         select.select_by_value(value)
         time.sleep(5)
 
-        nome_arquivo_destino = os.path.join(origem, f"{nome_arq}.csv") # crio uma variavel onde aloco a junção do arquivo baixado e também o renomeio
-        if os.path.exists(nome_arquivo_destino): # caso o arquivo já exista na pasta, eu pulo o seu value e vou para o proximo, passando por toda lista
-            print(f"O arquivo para o município {nome_arq} já existe. Pulando para o próximo.")
-            continue
-
-        print()
         print(f'Consultando Municipio {nome_arq} com Codigo: {value}')
-        print()
 
-
-        # Clicar no botão Consultar
-        consulta = Wait.until(EC.element_to_be_clickable((By.NAME, 'form:botaoConsultar'))) # aguardo até o elemento voltar a ser clicavel
+        consulta = Wait.until(EC.element_to_be_clickable((By.NAME, 'form:botaoConsultar')))
         consulta.click()
         time.sleep(8)
 
         print(f'Exportando...')
-        # Clicar no botão Exportar CSV
         exporta = Wait.until(EC.element_to_be_clickable((By.NAME, 'form:botaoExportarCsv')))
         exporta.click()
 
@@ -140,16 +154,12 @@ if response.status_code == 200:
         nome_arquivo = 'relatorio_mei.csv'
         nome_novo = f'{nome_arq}.csv'
 
-        arquivo_atual = os.path.join(origem, nome_arquivo) #caminho até o arquivo atual
+        arquivo_atual = os.path.join(origem, nome_arquivo)
         time.sleep(8)
-        arquivo_novo = os.path.join(origem, nome_novo)#caminho onde sera alocado o arquivo com nome novo
-
-        arquivo_final = os.rename(arquivo_atual,arquivo_novo) # arquivo final sendo renomeado com o nome do MUNICIPIO
-                
+        arquivo_novo = os.rename(arquivo_atual, os.path.join(origem, nome_novo))
 
     mover_arquivo()
-
-    driver.quit() #Fecho a janela
+    driver.quit()
 
 else:
     print("Falha ao acessar a página:", response.status_code)
