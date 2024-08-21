@@ -14,8 +14,16 @@ import sys
 
 print("Rodando webscrapping MEI do segmento: CNAE UF/Município/Sexo")
 
+# ------------------------------ PARAMETROS PAI ------------------------------ #
 Ano = datetime.datetime.now().year
 Nome_Pasta = str(Ano % 100)
+origem = r"Y:\Econômicas\MEI_Estatísticas\default"
+destino_final = r"Y:\Econômicas\MEI_Estatísticas\Estado de São Paulo por Sexo"
+municipios = r"Arquivos\municipios.json"
+# ------------------------------ PARAMETROS PAI ------------------------------ #
+
+
+# ---------------------------------- FUNÇÕES --------------------------------- #
 
 # Função para identificar o município pelo ID
 def Identificar_Municipio(arquivo, id):
@@ -50,25 +58,32 @@ extensao = ".csv"
 
 # Função para mover arquivo
 def mover_arquivo():
-    origem = r"Y:\Econômicas\MEI_Estatísticas\Estado de São Paulo por Sexo\teste"
-    destino = criar_pasta(origem, Nome_Pasta)
+    origem = r"Y:\Econômicas\MEI_Estatísticas\Estado de São Paulo por Sexo"
+    destino = criar_pasta(destino_final, Nome_Pasta)
     
     for nome_arquivo in os.listdir(origem):
         if nome_arquivo.endswith(extensao):
             caminho_origem = os.path.join(origem, nome_arquivo)
-            caminho_destino = os.path.join(destino, nome_arquivo)    
+            caminho_destino = os.path.join(destino, nome_arquivo)
             shutil.move(caminho_origem, caminho_destino)
             print(f"Arquivo '{nome_arquivo}' movido para {destino}.")
 
 # Função para carregar o progresso do último arquivo baixado
 def carregar_progresso(origem):
     arquivos_existentes = sorted([f for f in os.listdir(origem)])
-#    with open('progresso.txt', 'w') as f:
-#       f.write(arquivos_existentes)
     if arquivos_existentes:
         ultimo_arquivo = arquivos_existentes[-1]
         return ultimo_arquivo
     
+
+
+# ---------------------------------- FUNÇÕES --------------------------------- #
+
+
+
+
+
+# -------------------------- SELENIUM(Webscrapping) -------------------------- #
 
 # Configurações do Selenium
 url = "http://www22.receita.fazenda.gov.br/inscricaomei/private/pages/relatorios/opcoesRelatorio.jsf" 
@@ -81,7 +96,7 @@ if response.status_code == 200:
 
     prefs = {
         "profile.default_content_settings.popups": 0,
-        "download.default_directory": r"Y:\Econômicas\MEI_Estatísticas\Estado de São Paulo por Sexo\teste",
+        "download.default_directory": r"Y:\Econômicas\MEI_Estatísticas\default",
         "directory_upgrade": True
     }
 
@@ -104,8 +119,6 @@ if response.status_code == 200:
     select = Select(selecao_elemento2)
     options = [option.get_attribute("value") for option in select.options]
 
-    origem = r"Y:\Econômicas\MEI_Estatísticas\Estado de São Paulo por Sexo\teste"
-    municipios = r"Arquivos\municipios.json"
 
     # Carregar progresso
     ultimo_municipio = carregar_progresso(origem)
@@ -163,3 +176,5 @@ if response.status_code == 200:
 
 else:
     print("Falha ao acessar a página:", response.status_code)
+
+# -------------------------- SELENIUM(Webscrapping) -------------------------- #
