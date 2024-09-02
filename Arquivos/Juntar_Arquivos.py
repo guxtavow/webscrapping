@@ -25,5 +25,5 @@ for arquivo in os.listdir(caminho_pasta):
 df_final = pd.concat(dataframes, ignore_index=True)
 print(df_final.size)
 print(df_final.head())
-df_final.to_csv('teste.csv',index=False)
+df_final.to_excel('teste.xlsx',index=False)
 # Agora df_final contém todos os dados com a coluna 'municipio'
