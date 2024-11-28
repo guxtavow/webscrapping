@@ -22,8 +22,8 @@ pip install -r requirements.txt
         * **Atividade_Economica.py**    #Traz as informações dos MEIS de Atividade Economica
         * **CNAE-UF.py**     #Traz as informações dos MEIS de CNAE por UF
         * **Faixa_Etaria.py**   #Traz as informações dos MEIS de Faixa Etaria
-        * **Municipio.py**       #Traz as informações dos MEIS por Municipio
-        * **Municipio2.py**      #Traz as informações dos MEIS por Municipio e Genero, passando por TODOS os municipios de São Paulo
+        * **Municipio.py**       #Traz as informações dos MEIS por Municipio em um geral
+        * **Municipio2.py**      #Traz as informações dos MEIS por Municipio e Genero, passando por TODOS(um a um) os municipios de São Paulo
         * **municipios.json**   #Mapeia todos os ID's dos municipios para caso haja alguma quebra na execução do codigo, ele saber o id do municipio que deu erro e continuar a partir dele
     * **Exec.py**   # Executa todos os scripts da pasta 'Arquivos', em ordem
 
