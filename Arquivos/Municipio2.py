@@ -58,7 +58,7 @@ extensao = ".csv"
 
 # Função para mover arquivo
 def mover_arquivo():
-    origem = r"Y:\Econômicas\MEI_Estatísticas\Estado de São Paulo por Sexo"
+    origem = r"Y:\Econômicas\MEI_Estatísticas\default"
     destino = criar_pasta(destino_final, Nome_Pasta)
     
     for nome_arquivo in os.listdir(origem):
@@ -68,7 +68,7 @@ def mover_arquivo():
             shutil.move(caminho_origem, caminho_destino)
             print(f"Arquivo '{nome_arquivo}' movido para {destino}.")
 
-# Função para carregar o progresso do último arquivo baixado
+# Função para carregar o progresso do último arquivo baixado (Caso seja interrompido no meio do processo)
 def carregar_progresso(origem):
     arquivos_existentes = sorted([f for f in os.listdir(origem)])
     if arquivos_existentes:
@@ -173,6 +173,7 @@ if response.status_code == 200:
 
     mover_arquivo()
     driver.quit()
+    
 
 else:
     print("Falha ao acessar a página:", response.status_code)

@@ -1,81 +1,53 @@
-# WEBSCRAPPING 
+# WEBSCRAPPING - MEI's
 
-## SOBRE O PROJETO:
-A finalidade deste projeto é criar um webscrapping com a tentativa de automatizar mensalmente a coleta de dados de um especifico site, além de criar (por enquanto) as pastas automaticamente para separação e organização de dados.
+Este script tem como finalidade retornar as informações do site do MEI(Receita), além de salvar as informações e criar as pastas por ano e mês na rede da UGE - SEBRAE SP.
 
-## UTILIZAÇÕES:
-Neste projeto, utilizei **Python** com algumas bibliotecas: 
-<b>
-- Selenium
-- Time
-- OS
-- Requests
-- Subprocess
-</b>
+---
 
-## O APP ATÉ O MOMENTO APRESENTA:
-- Extração de dados
-- Seleção de botões e selects automáticos
-- Redirecionamento de local de download
-- Criação e organização de nome de pastas
-- Função de mover arquivos '.csv' para pastas criadas
+## FUNCIONALIDADES
+- Mapeia diversas informações do site;
+- Retorna informações sobre Município, Atividades Economicas, Genero, CNAE e Faixa Etaria sobre os MEI's de São Paulo;
+- Salva automaticamente os arquivos em pastas especificas, baseada no ano atual e o mês anterior;
+- Em alguns script, retorna informação sobre todos os municípios de São Paulo.
 
-## INSTALAÇÃO
-`$ pip install selenium`
-`$ pip install request`
+## REQUISITOS
+Certifique-se de ter o **Python(v3.8+)** instalado, logo depois instale também as bibliotecas necessárias dentro do arquivo `requirements.txt`, para executar essa ação, coloque no terminal o seguinte código:
+```bash
+pip install -r requirements.txt
+```
 
-## INICIALIZAR
-Este arquivo utiliza a versão do Python: 3.12 antes de executa-lo instalar o arquivo `requirements.txt`.
+## ESTRUTURAÇÃO DO PROJETO
+- Webscrapping - MEI
+    * Arquivos
+        * **Atividade_Economica.py**    #Traz as informações dos MEIS de Atividade Economica
+        * **CNAE-UF.py**     #Traz as informações dos MEIS de CNAE por UF
+        * **Faixa_Etaria.py**   #Traz as informações dos MEIS de Faixa Etaria
+        * **Municipio.py**       #Traz as informações dos MEIS por Municipio
+        * **Municipio2.py**      #Traz as informações dos MEIS por Municipio e Genero, passando por TODOS os municipios de São Paulo
+        * **municipios.json**   #Mapeia todos os ID's dos municipios para caso haja alguma quebra na execução do codigo, ele saber o id do municipio que deu erro e continuar a partir dele
+    * **Exec.py**   # Executa todos os scripts da pasta 'Arquivos', em ordem
 
-Assim que instalar, para executa-lo:
+## COMO EXECUTAR
+Para executar esse scripts é bem simples, rode apenas o arquivo `Exec.py` pois assim, ele rodará todos os outros scripts. Agora se quiser apenas uma informação específica, rode o script do dado que você deseja. 
 
-`$ python Exec.py`
-
-## OBSERVAÇÃO
- O projeto, quando executado, sempre criara uma pasta referente ao mês passado, pois sua importanção deve acontecer de forma MENSAL. Tenha em mente de executa-lo no começo do mês, para extrair todos os dados do mês passado acumulados.
-
- <h3><b><font color="#green">Finalizado.</font></b></h3>
-
-***
-
-<br />
-<br />
-
-<br />
-<br />
+**Lembrando que:**
+Sempre que você rodar esse arquivo, será criada uma pasta na rede da UGE com o ano e o mês passado (partindo do mês que você esta)que esse script foi executado, por isso, é recomendável executar este script apenas no começo de cada mês.
 
 
-# English Version:
+## COMO FUNCIONA
+O script entra no site do MEI, identifica todos os links da pagina inicial, clicando em cada um que é necessário obter a informação e fazendo todo o processo de identificar as variaveis necessárias para exportar o xlsx com os dados do MEI.
 
-## ABOUT THE PROJECT:
-The purpose of this project is to create a webscraping tool aiming to automate the monthly data collection from a specific website and (for now) create folders automatically for organizing data.
+Logo após isso, ele mapeia nossa rede da UGE, obtem o mês e o ano atual e retorna o ano + o mês anterior como nome de uma nova pasta que será criada em um diretório especifico para cada dado, afinal os resultados no site do MEI, são "fotografias" acumuladas de dados, que são atualizadas a cada semana.
 
-## USES:
-In this project, I used Python with some libraries:
-<b>
-- Selenium
-- Time
-- OS
-- Requests
-- Subprocess
-</b>
+**Obs:** O script `Municipio2.py` é o mais demorado dentre os códigos, pois ele passa por todos os Municípios de São Paulo. Por conta disso, caso haja algum erro no meio da execução do codigo, é só rodar novamente, pois ele passa por todos os ids e os nomes dos arquivos já gerados e continua a partir da onde deu o erro.
 
-## CURRENT FEATURES ON APP:
-- Data extraction
-- Automatic button and select elements selection
-- Redirecting download location
-- Create and organize folders
-- Move '.csv' files to new folders
+## DIRETORIOS
 
-## INSTALLATION
-`$ pip install selenium`
-`$ pip install request`
+UGE > Pesquisas > Econômicas > MEI_Estatísticas
 
-## INITIALIZE
-`$ python Exec.py`
+Caminho: Z:\Pesquisas\Econômicas\MEI_Estatísticas
 
-## OBS
-The program, when executed, always create a folder of last month, thats why its a recommendation only use this on first day of your respectivily month for bring data of the last.
-
-## PROJECT STATUS:
- <h3><b><font color="#e5e619">Finished.</font></b></h3>
+a) Atividade Econômica > Brasil 
+b) CNAE/UF > Estado de São Paulo 
+c) CNAE/Município > Municípios de São Paulo 
+d) CNAE UF/Município/Sexo > Estado de São Paulo por Sexo
