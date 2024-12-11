@@ -1,6 +1,6 @@
 # WEBSCRAPPING - MEI's
 
-Este script tem como finalidade retornar as informações do site do MEI(Receita), além de salvar as informações e criar as pastas por ano e mês na rede da UGE - SEBRAE SP.
+Este script tem como finalidade retornar as informações do site do MEI(Receita), além de salvar as informações e criar as pastas por ano e mês(anterior) na rede da UGE - SEBRAE SP.
 
 ---
 
@@ -32,7 +32,6 @@ Para executar esse scripts é bem simples, rode apenas o arquivo `Exec.py` pois 
 
 **Lembrando que:**
 Sempre que você rodar esse arquivo, será criada uma pasta na rede da UGE com o ano e o mês passado (partindo do mês que você esta)que esse script foi executado, por isso, é recomendável executar este script apenas no começo de cada mês.
-
 
 ## COMO FUNCIONA
 O script entra no site do MEI, identifica todos os links da pagina inicial, clicando em cada um que é necessário obter a informação e fazendo todo o processo de identificar as variaveis necessárias para exportar o xlsx com os dados do MEI.

@@ -19,7 +19,7 @@ Ano = datetime.datetime.now().year
 Nome_Pasta = str(Ano % 100)
 origem = r"Y:\Econômicas\MEI_Estatísticas\default"
 destino_final = r"Y:\Econômicas\MEI_Estatísticas\Estado de São Paulo por Sexo"
-municipios = r"Arquivos\municipios.json"
+municipios = r"Arquivos/municipios.json"
 # ------------------------------ PARAMETROS PAI ------------------------------ #
 
 
